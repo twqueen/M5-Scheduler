@@ -45,13 +45,13 @@ $(function () {
     for (var i = 9; i < 18; i++) {
       var BlockHour = "#hour-" + i;
       if (i > dayjs().format('H')) {
-        $(BlockHour).removeClass('present', 'past');
+        $(BlockHour).removeClass("present past");
         $(BlockHour).addClass('future');
       } else if (i < dayjs().format('H')) {
-        $(BlockHour).removeClass('present', 'future');
+        $(BlockHour).removeClass("present future");
         $(BlockHour).addClass('past');
       } else {
-        $(BlockHour).removeClass('past', 'future');
+        $(BlockHour).removeClass("future past");
         $(BlockHour).addClass('present');
       };
     };
