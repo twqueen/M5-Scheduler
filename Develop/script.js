@@ -1,23 +1,75 @@
-// Wrap all code that interacts with the DOM in a call to jQuery to ensure that
-// the code isn't run until the browser has finished rendering all the elements
-// in the html.
+//function will not work until everything is ready and loaded from html
+
 $(function () {
-  // TODO: Add a listener for click events on the save button. This code should
-  // use the id in the containing time-block as a key to save the user input in
-  // local storage. HINT: What does `this` reference in the click listener
-  // function? How can DOM traversal be used to get the "hour-x" id of the
-  // time-block containing the button that was clicked? How might the id be
-  // useful when saving the description in local storage?
-  //
-  // TODO: Add code to apply the past, present, or future class to each time
-  // block by comparing the id to the current hour. HINTS: How can the id
-  // attribute of each time-block be used to conditionally add or remove the
-  // past, present, and future classes? How can Day.js be used to get the
-  // current hour in 24-hour time?
-  //
-  // TODO: Add code to get any user input that was saved in localStorage and set
-  // the values of the corresponding textarea elements. HINT: How can the id
-  // attribute of each time-block be used to do this?
-  //
-  // TODO: Add code to display the current date in the header of the page.
+
+  //save button saves user inputs into local storage
+  var BtnEl = $('.saveBtn')
+  var SavedEvents = []
+
+  BtnEl.on('click', function(event) {
+    event.preventDefault();
+
+    var UserInput = $(this).prev('textarea').val();
+    var InputHour = $(this).parent('div').attr('id');
+    var UserSch = {
+      Hour: InputHour,
+      Todo: UserInput
+    };
+
+    for (var i = 0; i < SavedEvents.length; i++) {
+      if (InputHour === SavedEvents[i].Hour) {
+        SavedEvents.splice(i, 1);
+      };
+    };
+    SavedEvents.push(UserSch);
+
+    localStorage.setItem('UserSchedule', JSON.stringify(SavedEvents));
+    window.alert("🌸 Event Saved 🌸 \n 🏰—ฅ/ᐠ. ̫ .ᐟ\\ฅ —🎠");
+  });
+  
+  //call out saved stuff and renders it into page upon refresh
+  function init() {
+    var storedSchedule = JSON.parse(localStorage.getItem('UserSchedule'));
+    if (storedSchedule !== null) {
+      for (var i = 0; i < storedSchedule.length; i++) {
+        SavedEvents.push(storedSchedule[i]);
+        var HourChild = "#" + storedSchedule[i].Hour + " > textarea"
+        $(HourChild).val(storedSchedule[i].Todo);
+      };
+    };
+  };
+  init();
+
+  //color code past present and future time blocks in the scheduler
+  function Colorcodingtime() {
+    for (var i = 9; i < 18; i++) {
+      var BlockHour = "#hour-" + i;
+      if (i > dayjs().format('H')) {
+        $(BlockHour).removeClass('present', 'past');
+        $(BlockHour).addClass('future');
+      } else if (i < dayjs().format('H')) {
+        $(BlockHour).removeClass('present', 'future');
+        $(BlockHour).addClass('past');
+      } else {
+        $(BlockHour).removeClass('past', 'future');
+        $(BlockHour).addClass('present');
+      };
+    };
+  };
+
+  //Time Display
+  var TimeDisplayEl = $('#currentDay');
+
+  function displayTime() {
+    var Now = dayjs().format('MMM DD, YYYY [at] HH:mm:ss a');
+    TimeDisplayEl.text(Now);
+  };
+
+  displayTime();
+  setInterval(displayTime, 1000);
+  setInterval(Colorcodingtime, 1000);
 });
+
+
+
+
