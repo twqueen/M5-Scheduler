@@ -16,11 +16,11 @@ This application serves to provide a daily planner for the user. The planner con
 
 Deployed application URL:
 
-
+https://twqueen.github.io/M5-Scheduler/
 
 Application Interface Sample:
 
-![Application Screenshot Sample]()
+![Sample Screenshot](./Develop/Screenshot_20230125_120223.png)
 
 ## Credits
 * Starting Code Origin: https://github.com/coding-boot-camp/crispy-octo-meme
